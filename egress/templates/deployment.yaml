@@ -8,6 +8,10 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  {{- if .Values.deploymentStrategy }}
+  strategy:
+    {{- toYaml .Values.deploymentStrategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "egress.selectorLabels" . | nindent 6 }}

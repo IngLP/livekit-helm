@@ -21,6 +21,8 @@ fullnameOverride: ""
 autoscaling:
   enabled: false
 
+deploymentStrategy: {}
+
 nodeSelector: {}
 
 resources: {}
