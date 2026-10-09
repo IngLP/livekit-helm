@@ -43,3 +43,6 @@ tolerations: []
 affinity: {}
 
 deploymentStrategy: {}
+
+# Overrides the image ENTRYPOINT when set.
+command: []
