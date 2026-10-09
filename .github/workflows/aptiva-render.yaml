@@ -1,0 +1,31 @@
+# Aptiva fork check. Upstream's test.yaml passes chart directories where
+# chart-testing expects their parents, so it reports "No chart changes
+# detected" and stays green even on an unloadable chart (upstream #167).
+# This workflow lives in its own file so that rebasing onto upstream never
+# conflicts with it.
+name: Render charts
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same Helm as the one bundled in ArgoCD v3.0.6, which renders these
+      # charts for the Aptiva clusters.
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.17.1
+
+      - name: Lint and render every chart with its defaults
+        run: |
+          for chart in egress ingress livekit-server; do
+            helm lint "$chart"
+            helm template "$chart" "$chart" > /dev/null
+          done
